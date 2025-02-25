@@ -377,3 +377,15 @@ This is the API documentation for the **Library App** built with **Next.js API R
 ## 🔒 Authentication Notes
 - Use **JWT** for protected routes.
 - Include `Authorization: Bearer <token>` in the headers for all secured routes.
+
+
+## 📬 Automated Reminders
+
+### Send Return Reminders
+To send automated reminders for borrowed books:
+```bash
+node scripts/sendReminders.js
+```
+This script checks for overdue books and sends email notifications to borrowers.
+
+---
