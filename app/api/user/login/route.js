@@ -1,5 +1,5 @@
-import prisma from "@/utils/db";
-import { comparePassword, generateToken } from "@/utils/auth";
+import prisma from "../../utils/db";
+import { comparePassword, generateToken } from "../../utils/auth";
 
 export async function POST(req) {
   try {
