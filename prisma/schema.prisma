@@ -19,23 +19,25 @@ model User {
   borrowings Borrowing[]
   department String
   profile_picture String?
+  reviews    Review[] 
 
 }
 
 model Category {
   id    Int    @id @default(autoincrement())
-  name  String
+  name  String @unique
   books Book[] @relation("BookToCategory")
 }
 
 model Review {
-  id    Int    @id @default(autoincrement())
-  review  String
-  student    User      @relation(fields: [studentId], references: [id])
-  bookId     Int
-  book       Book      @relation(fields: [bookId], references: [id])
- 
+  id       Int    @id @default(autoincrement())
+  review   String
+  studentId String
+  student  User   @relation(fields: [studentId], references: [studentId])
+  bookId   Int
+  book     Book   @relation(fields: [bookId], references: [id])
 }
+
 
 model Book {
   id         Int         @id @default(autoincrement())
@@ -47,6 +49,7 @@ model Book {
   quantity   Int
   categories Category[]  @relation("BookToCategory")
   borrowings Borrowing[]
+  reviews    Review[] 
 }
 
 model Borrowing {
