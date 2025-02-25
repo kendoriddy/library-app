@@ -34,3 +34,19 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+## Deploy on Docker Postgres Database Server
+docker run --name library-db -e POSTGRES_USER=admin -e  POSTGRES_PASSWORD=admin -e POSTGRES_DB=library -p 5432:5432 -d postgres 
+
+
+to migrate changes to the db 
+
+```bash
+npx prisma migrate dev --name init
+```
+
+to seed the database
+```bash
+npm run seed
+```
