@@ -24,6 +24,7 @@ const Page = () => {
   const [departments, setDepartments] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [collectionDate, setCollectionDate] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,6 +46,7 @@ const Page = () => {
     }
 
     try {
+      setIsLoading(true);
       const user = JSON.parse(localStorage.getItem("user"));
       const token = localStorage.getItem("token");
       const response = await apiClient("/cardCollection", {
@@ -68,6 +70,8 @@ const Page = () => {
     } catch (error) {
       console.error("Error:", error);
       toast.error("Something went wrong.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -121,7 +125,7 @@ const Page = () => {
                   className="bg-blue-600 text-white px-4 py-2 rounded"
                   onClick={handleSchedule}
                 >
-                  Confirm
+                  {isLoading ? "Loading..." : "Confirm"}
                 </button>
               </div>
             </div>
@@ -262,7 +266,6 @@ const Page = () => {
         </form>
 
         <button
-          type="submit"
           className="bg-gradient-to-r from-[#0D0C34] to-[#1e1e2f] text-white py-3 px-6 rounded-[15px] text-[15px] font-medium hover:bg-gray-600 transition w-full mt-4"
           onClick={() => router.push("/")}
         >
