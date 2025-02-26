@@ -14,6 +14,7 @@ model User {
   name             String
   email            String           @unique
   password         String
+  phone_number     String?
   studentId        String           @unique
   borrowings       Borrowing[]
   department       String

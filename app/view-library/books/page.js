@@ -1,49 +1,29 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import logo from "@/assets/Image17.png";
 import Image from "next/image";
 import libraryimg from "@/assets/libraryimg.png";
 import { useRouter } from "next/navigation";
 
-const dummyBooks = {
-  1: [
-    { id: "A1", title: "Encyclopedia of Everything", author: "John Smith" },
-    { id: "A2", title: "Introduction to Library Science", author: "Jane Doe" },
-  ],
-  2: [
-    { id: "B1", title: "The Art of Thinking Clearly", author: "Rolf Dobelli" },
-    { id: "B2", title: "Psychology 101", author: "Paul Kleinman" },
-  ],
-  3: [
-    { id: "BL1", title: "The World's Religions", author: "Huston Smith" },
-    { id: "BL2", title: "History of Christianity", author: "Justo Gonzalez" },
-  ],
-  4: [
-    { id: "C1", title: "The Historian’s Craft", author: "Marc Bloch" },
-    {
-      id: "C2",
-      title: "Archaeology: A Brief Introduction",
-      author: "Brian Fagan",
-    },
-  ],
-  5: [
-    {
-      id: "D1",
-      title: "A People's History of the United States",
-      author: "Howard Zinn",
-    },
-    { id: "D2", title: "Guns, Germs, and Steel", author: "Jared Diamond" },
-  ],
-};
-
 const BooksSection = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const sectionId = searchParams.get("sectionId");
+  const [books, setBooks] = useState([]);
 
-  const books = dummyBooks[sectionId] || [];
+  useEffect(() => {
+    const selectedCategory = JSON.parse(
+      localStorage.getItem("selectedCategory")
+    );
+    console.log(selectedCategory);
+    if (selectedCategory) {
+      setBooks(selectedCategory.books);
+    }
+  }, [sectionId]);
+
+  console.log(books);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-custom-blue-1 via-custom-blue-2 to-custom-blue-3 pt-4 text-white">

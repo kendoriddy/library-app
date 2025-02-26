@@ -4,6 +4,8 @@ import { useState } from "react";
 import facultiesData from "../../utils/faculties.json";
 import sessionsData from "../../utils/sessions.json";
 import { useRouter } from "next/navigation";
+import { apiClient } from "@/utils/apiClient";
+import { toast } from "react-toastify";
 
 export default function RegistrationForm() {
   const router = useRouter();
@@ -16,8 +18,13 @@ export default function RegistrationForm() {
     faculty: "",
     department: "",
     phone: "",
+    password: "",
   });
   const [departments, setDepartments] = useState([]);
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,10 +47,59 @@ export default function RegistrationForm() {
     setStep(1);
   };
 
-  const handleSubmit = (e) => {
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   console.log("Form submitted:", form);
+  //   router.push("/signup/success");
+  // };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", form);
-    router.push("/signup/success");
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+
+    // Vallidation checks
+    if (!/^\d{6}$/.test(form.matric)) {
+      toast.error("Matric number must be a 6-digit number.");
+      setLoading(false);
+      return;
+    }
+
+    if (!/^[a-zA-Z0-9._%+-]+@stu\.ui\.edu\.ng$/.test(form.email)) {
+      toast.error("Email must end with @stu.ui.edu.ng.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      console.log(form);
+      const payload = {
+        name: form.name,
+        email: form.email,
+        password: form.password,
+        studentId: form.matric,
+        department: form.department,
+        faculty: form.faculty,
+        session_of_entry: form.session,
+      };
+      const response = await apiClient("user/register", {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      setSuccess(response.message);
+      toast.success(response.message);
+      router.push("/signup/success");
+    } catch (err) {
+      setError(err.message || "Something went wrong");
+      toast.error(err.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -200,8 +256,21 @@ export default function RegistrationForm() {
                 </label>
                 <input
                   type="number"
-                  name="matric"
+                  name="phone"
                   value={form.phone}
+                  onChange={handleChange}
+                  className="w-full focus:outline-none text-[#383838] rounded-[15px]"
+                />
+              </div>
+
+              <div className="bg-white border border-[#626262] rounded-[15px] px-3 py-0.5">
+                <label className="block text-[#383838] opacity-50 text-[10px] font-semibold mb-1">
+                  PASSWORD
+                </label>
+                <input
+                  type="password"
+                  name="password"
+                  value={form.password}
                   onChange={handleChange}
                   className="w-full focus:outline-none text-[#383838] rounded-[15px]"
                 />
@@ -235,7 +304,7 @@ export default function RegistrationForm() {
                   type="submit"
                   className="bg-gradient-to-r from-[#3733CA] to-[#5D5ADB] text-white py-3 px-6 rounded-[15px] text-[15px] font-medium hover:bg-gray-600 transition"
                 >
-                  Submit
+                  {loading ? "Loading..." : "Submit"}
                 </button>
               </div>
             </>

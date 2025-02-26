@@ -1,21 +1,41 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { apiClient } from "@/utils/apiClient";
 import logo from "@/assets/Image17.png";
 import libraryimg from "@/assets/libraryimg.png";
 
-const librarySections = [
-  { id: 1, title: "(A) General Works, Polygraphy" },
-  { id: 2, title: "(B) Philosophy, Psychology" },
-  { id: 3, title: "(BL - BX) Religion" },
-  { id: 4, title: "(C) Auxiliary Science of History" },
-  { id: 5, title: "(D) History: General, Europe, America, Africa" },
-];
-
 const Page = () => {
   const router = useRouter();
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await apiClient("/category", {
+          method: "GET",
+        });
+        setCategories(response);
+      } catch (err) {
+        setError(err.response?.message || "Failed to fetch categories");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  const handleBrowse = (category) => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("selectedCategory", JSON.stringify(category));
+      router.push(`/view-library/books?categoryId=${category.id}`);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-custom-blue-1 via-custom-blue-2 to-custom-blue-3 pt-4 text-white">
@@ -66,25 +86,28 @@ const Page = () => {
         </h5>
         <Image alt="logo" src={libraryimg} width={300} height={111} />
 
+        {/* Display Categories */}
         <div className="mt-4">
-          {librarySections.map((section) => (
-            <div
-              key={section.id}
-              className="border-b border-[#626262] py-3 flex items-center justify-between"
-            >
-              <p className="text-[#383838] text-[10px] font-semibold">
-                {section.title}
-              </p>
-              <button
-                onClick={() =>
-                  router.push(`/view-library/books?sectionId=${section.id}`)
-                }
-                className="bg-gradient-to-r from-[#3733CA] to-[#5D5ADB] text-white py-1.5 px-3 rounded-[6px] text-[6px] font-medium"
+          {loading && <p className="text-[#383838]">Loading categories...</p>}
+          {error && <p className="text-red-500">{error}</p>}
+          {!loading &&
+            !error &&
+            categories.map((category) => (
+              <div
+                key={category.id}
+                className="border-b border-[#626262] py-3 flex items-center justify-between"
               >
-                Browse
-              </button>
-            </div>
-          ))}
+                <p className="text-[#383838] text-[10px] font-semibold">
+                  {category.name}
+                </p>
+                <button
+                  onClick={() => handleBrowse(category)}
+                  className="bg-gradient-to-r from-[#3733CA] to-[#5D5ADB] text-white py-1.5 px-3 rounded-[6px] text-[6px] font-medium"
+                >
+                  Browse
+                </button>
+              </div>
+            ))}
         </div>
 
         {/* Back Button */}

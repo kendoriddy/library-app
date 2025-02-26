@@ -6,6 +6,8 @@ import logo from "@/assets/Image17.png";
 import facultiesData from "../../utils/faculties.json";
 import sessionsData from "../../utils/sessions.json";
 import { useRouter } from "next/navigation";
+import { apiClient } from "@/utils/apiClient";
+import { toast } from "react-toastify";
 
 const Page = () => {
   const router = useRouter();
@@ -20,6 +22,8 @@ const Page = () => {
   });
 
   const [departments, setDepartments] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [collectionDate, setCollectionDate] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,6 +35,33 @@ const Page = () => {
     if (name === "faculty") {
       setDepartments(facultiesData[value] || []);
       setForm((prev) => ({ ...prev, department: "" }));
+    }
+  };
+
+  const handleSchedule = async () => {
+    if (!collectionDate) {
+      toast.error("Please select a collection date.");
+      return;
+    }
+
+    try {
+      const response = await apiClient("/cardCollections", {
+        method: "POST",
+        body: JSON.stringify({
+          studentId: 1, // You may replace with actual student ID
+          collectionDate: new Date(collectionDate).toISOString(),
+        }),
+      });
+
+      if (response.ok) {
+        toast.success("Library card collection scheduled successfully!");
+        setShowModal(false);
+      } else {
+        toast.error("Failed to schedule collection. Try again.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Something went wrong.");
     }
   };
 
@@ -51,11 +82,45 @@ const Page = () => {
             <p className="text-[12px] font-semibold">Collect my Library Card</p>
           </div>
           <div>
-            <button className="text-[11px] bg-[#726EF8] shadow-[5px_15px_45px_#00000029] rounded-[9px] px-3 py-1">
+            <button
+              className="text-[11px] bg-[#726EF8] shadow-[5px_15px_45px_#00000029] rounded-[9px] px-3 py-1"
+              onClick={() => setShowModal(true)}
+            >
               Schedule
             </button>
           </div>
         </div>
+
+        {/* Schedule Modal */}
+        {showModal && (
+          <div className="fixed inset-0 z-20 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="bg-white rounded-lg p-5 w-80">
+              <h3 className="text-black font-semibold mb-3">Select a Date</h3>
+              <input
+                type="datetime-local"
+                className="w-full border p-2 rounded text-black"
+                value={collectionDate}
+                onChange={(e) => {
+                  setCollectionDate(e.target.value);
+                }}
+              />
+              <div className="flex justify-between mt-4">
+                <button
+                  className="bg-gray-300 px-4 py-2 rounded"
+                  onClick={() => setShowModal(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="bg-blue-600 text-white px-4 py-2 rounded"
+                  onClick={handleSchedule}
+                >
+                  Confirm
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         <form className="space-y-2">
           <div className="bg-white border border-[#626262] rounded-[15px] px-3 py-0.5">
@@ -193,7 +258,7 @@ const Page = () => {
         <button
           type="submit"
           className="bg-gradient-to-r from-[#0D0C34] to-[#1e1e2f] text-white py-3 px-6 rounded-[15px] text-[15px] font-medium hover:bg-gray-600 transition w-full mt-4"
-          onClick={() => router.push("/login")}
+          onClick={() => router.push("/")}
         >
           Back
         </button>

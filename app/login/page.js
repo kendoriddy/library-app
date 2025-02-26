@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { apiClient } from "@/utils/apiClient";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const [form, setForm] = useState({ matric: "", password: "" });
@@ -17,23 +19,26 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setErrorMessage("");
 
     try {
-      const result = await signIn("credentials", {
-        redirect: false,
-        matric: form.matric,
+      console.log(form);
+      const payload = {
+        studentId: form.matric,
         password: form.password,
+      };
+      const response = await apiClient("user/login", {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
-      if (!result?.error) {
-        router.push("/dashboard");
-      } else {
-        setErrorMessage("Invalid matric number or password.");
-      }
-    } catch (error) {
-      console.error("Login error:", error);
-      setErrorMessage("Something went wrong. Please try again.");
+      toast.success(response.message);
+      router.push("/");
+    } catch (err) {
+      console.log(err);
+      toast.error(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

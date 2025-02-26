@@ -8,26 +8,31 @@ import card2 from "@/assets/card2.png";
 import card3 from "@/assets/card3.png";
 import FeatureCard from "@/components/FeatureCard";
 import book1 from "@/assets/book1.png";
-
-const books = [
-  {
-    id: 1,
-    image: book1,
-    title: "Are you Afraid of the Dark",
-    author: "Sidney Sheldon",
-    genre: "Fiction Novel",
-  },
-  {
-    id: 2,
-    image: book1,
-    title: "Are you Afraid of the Dark",
-    author: "Sidney Sheldon",
-    genre: "Fiction Novel",
-  },
-];
+import { apiClient } from "@/utils/apiClient";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const router = useRouter();
+  const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const response = await apiClient("/book", {
+          method: "GET",
+        });
+        setBooks(response?.slice(0, 4));
+      } catch (error) {
+        console.error("Failed to fetch books:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBooks();
+  }, []);
+  console.log(books);
 
   const features = [
     {
@@ -99,21 +104,21 @@ export default function Home() {
 
         {/* Featured books */}
         <div className="mt-7 mb-4">
-          <h4 className="text-[13px] font-semibold text-[#383838]">
+          <h4 className="text-[13px] mb-2 font-semibold text-[#383838]">
             New Book Additions
           </h4>
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap">
             {books.map((book, index) => (
               <div
                 key={index}
                 className="flex flex-col items-start justify-center"
               >
-                <Image src={book.image} alt="book" width={200} height={200} />
-                <p className="text-[#383838] text-[8px] font-semibold ml-4">
+                <Image src={book.image} alt="book" width={120} height={120} />
+                <p className="text-[#383838] text-[8px] font-semibold ml-0 capitalize">
                   {book.title}
                 </p>
-                <p className="text-[#383838] text-[8px] font-semibold ml-4">
+                <p className="text-[#383838] text-[8px] font-semibold ml-0 capitalize">
                   {book.author}{" "}
                   <span className="text-[#3733CA]">{book.genre}</span>
                 </p>
