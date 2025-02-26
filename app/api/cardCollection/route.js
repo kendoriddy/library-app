@@ -1,3 +1,5 @@
+import {prisma} from "../../utils/db"
+import {authenticate} from "../../utils/middleware"
 export async function GET() {
   try {
     const cardCollection = await prisma.cardCollection.findMany({
