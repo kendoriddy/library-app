@@ -33,7 +33,7 @@ This is the API documentation for the **Library App** built with **Next.js API R
 ## 🔐 Authentication
 
 ### 🔹 Register a User
-**Endpoint:** `POST /api/auth/register`
+**Endpoint:** `POST /api/user/register`
 
 **Request Body:**
 ```json
@@ -41,21 +41,29 @@ This is the API documentation for the **Library App** built with **Next.js API R
   "name": "John Doe",
   "email": "john@example.com",
   "password": "securepassword",
-  "studentId": "S12345"
+  "studentId": "S12345",
+   "department":"Computer Engineering",
+   "faculty":"Faculty of engineering",
+   "session_of_entry":"2020/2021"
 }
+
 ```
 **Response:**
 ```json
 {
   "id": 1,
-  "name": "John Doe",
+    "name": "John Doe",
   "email": "john@example.com",
-  "studentId": "S12345"
+  "password": "securepassword",
+  "studentId": "S12345",
+   "department":"Computer Engineering",
+   "faculty":"Faculty of engineering",
+   "session_of_entry":"2020/2021"
 }
 ```
 
 ### 🔹 Login
-**Endpoint:** `POST /api/auth/login`
+**Endpoint:** `POST /api/user/login`
 
 **Request Body:**
 ```json
@@ -72,7 +80,7 @@ This is the API documentation for the **Library App** built with **Next.js API R
 ```
 
 ### 🔹 Update Profile
-**Endpoint:** `PUT /api/auth/profile`
+**Endpoint:** `PUT /api/user/profile`
 
 **Headers:**
 `Authorization: Bearer <your-jwt-token>`
@@ -206,7 +214,7 @@ This is the API documentation for the **Library App** built with **Next.js API R
 ```
 
 ### 🔹 Get a Category by ID
-**Endpoint:** `GET /api/categories/:id`
+**Endpoint:** `GET /api/category/:id`
 
 **Response:**
 ```json
@@ -372,6 +380,83 @@ This is the API documentation for the **Library App** built with **Next.js API R
 ]
 ```
 
+# CardCollection Model
+
+Represents a card collection entity in the system.
+
+## Fields
+
+- `id` (Int): Primary key, auto-incrementing identifier
+- `studentId` (Int): Unique identifier referencing the student User
+- `student` (User): Relation to User model representing the student
+- `collectionDate` (DateTime): Date and time when the card was collected
+- `is_collected` (Int, optional): Collection status flag, defaults to 0
+
+## Relations
+
+- One-to-one relation with `User` model through `studentId` field
+
+## Usage
+
+Used to track card collections by students. Each student can have one card collection record.
+
+### Create
+### 🔹 Create Card Collection
+**Endpoint:** `POST /api/card-collections`
+
+**Headers:**
+`Authorization: Bearer <your-jwt-token>`
+
+**Request Body:**
+```json
+{
+  "studentId": 1,
+  "collectionDate": "2024-02-25T12:00:00Z"
+}
+```
+**Response:**
+```json
+{
+  "id": 1,
+  "studentId": 1,
+  "collectionDate": "2024-02-25T12:00:00Z",
+  "is_collected": 0
+}
+```
+
+### 🔹 Update Card Collection Status
+**Endpoint:** `PUT /api/card-collections/:id`
+
+**Headers:**
+`Authorization: Bearer <your-jwt-token>`
+
+**Request Body:**
+```json
+{
+  "is_collected": 1
+}
+```
+**Response:**
+```json
+{
+  "id": 1,
+  "studentId": 1,
+  "is_collected": 1
+}
+```
+
+### 🔹 Get Card Collection By Student
+**Endpoint:** `GET /api/card-collections/student/:studentId`
+
+**Response:**
+```json
+{
+  "id": 1,
+  "studentId": 1,
+  "collectionDate": "2024-02-25T12:00:00Z",
+  "is_collected": 1
+}
+```
 ---
 
 ## 🔒 Authentication Notes

@@ -8,25 +8,25 @@ export async function PUT(req, { params }) {
       return Response.json({ error: auth.error }, { status: auth.status });
     }
 
-    const borrowing = await prisma.borrowing.findUnique({
+    const cardCollection = await prisma.cardCollection.findUnique({
       where: { id: parseInt(params.id) },
     });
 
-    if (!borrowing) {
-      return Response.json({ error: "Borrowing record not found" }, { status: 404 });
+    if (!cardCollection) {
+      return Response.json({ error: "cardCollection record not found" }, { status: 404 });
     }
-
-    await prisma.borrowing.update({
+    const body = await req.json();
+    
+    await prisma.cardCollection.update({
       where: { id: parseInt(params.id) },
-      data: { returnDate: new Date() },
+      data: {
+      studentId: body.studentId,
+      collectionDate: body.collectionDate ? new Date(body.collectionDate) : undefined,
+      is_collected: body.is_collected
+      },
     });
 
-    await prisma.book.update({
-      where: { id: borrowing.bookId },
-      data: { quantity: { increment: 1 } },
-    });
-
-    return Response.json({ message: "Book returned successfully" }, { status: 200 });
+    return Response.json({ message: "card collection updated successfully" }, { status: 200 });
   } catch (error) {
     console.error("Error returning book:", error);
     return Response.json({ error: "Something went wrong" }, { status: 500 });
@@ -40,11 +40,11 @@ export async function DELETE(req, { params }) {
       return Response.json({ error: auth.error }, { status: auth.status });
     }
 
-    await prisma.borrowing.delete({ where: { id: parseInt(params.id) } });
+    await prisma.cardCollection.delete({ where: { id: parseInt(params.id) } });
 
-    return Response.json({ message: "Borrowing record deleted successfully" }, { status: 200 });
+    return Response.json({ message: "cardCollection record deleted successfully" }, { status: 200 });
   } catch (error) {
-    console.error("Error deleting borrowing record:", error);
+    console.error("Error deleting cardCollection record:", error);
     return Response.json({ error: "Something went wrong" }, { status: 500 });
   }
 }

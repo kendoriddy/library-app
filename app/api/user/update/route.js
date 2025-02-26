@@ -1,6 +1,6 @@
-import prisma from "@/utils/db";
-import { authenticate } from "@/utils/middleware";
-import { hashPassword } from "@/utils/auth";
+import prisma from "../../../utils/db";
+import { authenticate } from "../../../utils/middleware";
+import { hashPassword } from "../../../utils/auth";
 
 export async function PUT(req) {
   try {
@@ -12,7 +12,7 @@ export async function PUT(req) {
 
     const userId = auth.userId;
     const body = await req.json();
-    const { name, password } = body;
+    const { name, password,studentId,department } = body;
 
     if (!name && !password) {
       return Response.json({ error: "Provide at least one field to update" }, { status: 400 });
@@ -21,7 +21,9 @@ export async function PUT(req) {
     const updateData = {};
     if (name) updateData.name = name;
     if (password) updateData.password = await hashPassword(password);
+    if(department) updateData.department = department;
 
+  
     // Update user profile
     const updatedUser = await prisma.user.update({
       where: { id: userId },
