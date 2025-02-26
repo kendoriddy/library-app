@@ -11,7 +11,15 @@ export async function POST(req) {
     }
 
     // Check if user exists
-    const user = await prisma.user.findUnique({ where: { studentId } });
+    const user = await prisma.user.findUnique({ where: { studentId },
+        include: { 
+        reviews: true,
+        borrowings: {
+          include:{book:true}
+        },
+        cardCollection:true
+
+   } });
 
     if (!user) {
       return Response.json({ error: "Invalid studentId or password" }, { status: 401 });
@@ -27,7 +35,7 @@ export async function POST(req) {
     const token = generateToken(user);
 
     return Response.json(
-      { message: "Login successful", token, user: { id: user.id, name: user.name, email: user.email, studentId: user.studentId } },
+      { message: "Login successful", token, user: user },
       { status: 200 }
     );
   } catch (error) {
