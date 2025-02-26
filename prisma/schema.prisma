@@ -24,6 +24,7 @@ model User {
   cardCollection   cardCollection?  @relation("UserCardCollection")
 }
 
+
 model Category {
   id         Int    @id @default(autoincrement())
   name       String @unique
