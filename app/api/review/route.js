@@ -1,5 +1,5 @@
 import prisma from "../../utils/db";
-import { authenticate } from "../../../utils/middleware";
+import { authenticate } from "../../utils/middleware";
 
 export async function GET() {
   try {

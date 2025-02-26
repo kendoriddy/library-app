@@ -1,4 +1,4 @@
-import prisma from "../../utils/db";
+import prisma from "../../../utils/db";
 import { authenticate } from "../../../utils/middleware";
 
 export async function PUT(req, { params }) {

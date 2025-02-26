@@ -214,7 +214,7 @@ This is the API documentation for the **Library App** built with **Next.js API R
 ```
 
 ### 🔹 Get a Category by ID
-**Endpoint:** `GET /api/categories/:id`
+**Endpoint:** `GET /api/category/:id`
 
 **Response:**
 ```json

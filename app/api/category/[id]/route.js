@@ -1,11 +1,11 @@
-import prisma from "../../utils/db";
+import prisma from "../../../utils/db";
 import { authenticate } from "../../../utils/middleware";
 
 export async function GET(req, { params }) {
   try {
     const category = await prisma.category.findUnique({
       where: { id: parseInt(params.id) },
-      include: { book: true }
+      include: { books: true }
     });
 
     if (!category) {

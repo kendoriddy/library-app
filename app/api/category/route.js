@@ -1,3 +1,7 @@
+import prisma from "../../utils/db";
+import { authenticate } from "../../utils/middleware";
+
+
 export async function POST(req) {
   try {
     const auth = authenticate(req);
@@ -21,6 +25,19 @@ export async function POST(req) {
     return Response.json({ message: "category created successfully", category }, { status: 201 });
   } catch (error) {
     console.error("Error creating category:", error);
+    return Response.json({ error: "Something went wrong" }, { status: 500 });
+  }
+}
+
+export async function GET() {
+  try {
+    const category = await prisma.category.findMany({
+      include: { books: true }
+    });
+
+    return Response.json(category, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching books:", error);
     return Response.json({ error: "Something went wrong" }, { status: 500 });
   }
 }

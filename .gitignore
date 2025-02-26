@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+google-service-account.json
+library-app-452110-1abae3aac776.json

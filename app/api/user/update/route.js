@@ -1,6 +1,6 @@
-import prisma from "../../utils/db";
+import prisma from "../../../utils/db";
 import { authenticate } from "../../../utils/middleware";
-import { hashPassword } from "../../utils/auth";
+import { hashPassword } from "../../../utils/auth";
 
 export async function PUT(req) {
   try {
