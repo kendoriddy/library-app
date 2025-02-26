@@ -21,7 +21,6 @@ export default function Login() {
     setLoading(true);
 
     try {
-      console.log(form);
       const payload = {
         studentId: form.matric,
         password: form.password,
@@ -34,6 +33,11 @@ export default function Login() {
         },
       });
 
+      console.log(response);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("token", response.token);
+        localStorage.setItem("user", JSON.stringify(response.user));
+      }
       toast.success(response.message);
       router.push("/");
     } catch (err) {

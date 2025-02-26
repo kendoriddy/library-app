@@ -45,12 +45,18 @@ const Page = () => {
     }
 
     try {
-      const response = await apiClient("/cardCollections", {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const token = localStorage.getItem("token");
+      const response = await apiClient("/cardCollection", {
         method: "POST",
         body: JSON.stringify({
-          studentId: 1, // You may replace with actual student ID
+          studentId: user.id, // You may replace with actual student ID
           collectionDate: new Date(collectionDate).toISOString(),
         }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (response.ok) {
