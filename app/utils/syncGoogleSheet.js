@@ -54,7 +54,7 @@ export async function syncGoogleSheet(tableName) {
     try {
         const auth = await getAuthClient();
         const sheets = google.sheets({ version: 'v4', auth });
-        const spreadsheetId = '17Jwap981aaAe2yZ7bnjvR5SptOLJ1t6Al7k1wIzD3v8';
+        const spreadsheetId = '1qL4w0gsJximHe8guNZ1iJTXNzK_VoiV00d3Af-Se3GE';
         const sheetName = `${tableName}s`;
 
         // Ensure the sheet exists before updating
