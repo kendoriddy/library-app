@@ -18,7 +18,7 @@ model User {
   borrowings       Borrowing[]
   department       String
   faculty          String
-  session_of_entry? String
+  session_of_entry String?
   profile_picture  String?
   reviews          Review[] 
   cardCollection   cardCollection?  @relation("UserCardCollection")
