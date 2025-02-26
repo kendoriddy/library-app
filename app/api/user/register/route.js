@@ -1,12 +1,12 @@
-import prisma from "../../utils/db";
-import { hashPassword, generateToken } from "../../utils/auth";
+import prisma from "../../../utils/db";
+import { hashPassword, generateToken } from "../../../utils/auth";
 
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { name, email, password, studentId } = body;
+    const { name, email, password, studentId,department } = body;
 
-    if (!name || !email || !password || !studentId) {
+    if (!name || !email || !password || !studentId || !department) {
       return Response.json({ error: "All fields are required" }, { status: 400 });
     }
 
@@ -29,6 +29,7 @@ export async function POST(req) {
         email,
         password: hashedPassword,
         studentId,
+        department
       },
     });
 
