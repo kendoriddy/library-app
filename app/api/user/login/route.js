@@ -4,23 +4,23 @@ import { comparePassword, generateToken } from "../../../utils/auth";
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { email, password } = body;
+    const { studentId, password } = body;
 
-    if (!email || !password) {
-      return Response.json({ error: "Email and password are required" }, { status: 400 });
+    if (!studentId || !password) {
+      return Response.json({ error: "studentId and password are required" }, { status: 400 });
     }
 
     // Check if user exists
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({ where: { studentId } });
 
     if (!user) {
-      return Response.json({ error: "Invalid email or password" }, { status: 401 });
+      return Response.json({ error: "Invalid studentId or password" }, { status: 401 });
     }
 
     // Compare passwords
     const isMatch = await comparePassword(password, user.password);
     if (!isMatch) {
-      return Response.json({ error: "Invalid email or password" }, { status: 401 });
+      return Response.json({ error: "Invalid studentId or password" }, { status: 401 });
     }
 
     // Generate JWT token
