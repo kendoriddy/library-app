@@ -7,18 +7,15 @@ import Image from "next/image";
 import libraryimg from "@/assets/libraryimg.png";
 import { useRouter } from "next/navigation";
 
-const BooksSection = dynamic(() => import("@/components/BooksSection"), {
-  ssr: false,
-});
-
-const router = useRouter();
-const searchParams = useSearchParams();
-const sectionId = searchParams.get("sectionId");
-const [books, setBooks] = useState([]);
+const BooksSection = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const sectionId = searchParams.get("sectionId");
+  const [books, setBooks] = useState([]);
 
   useEffect(() => {
     const selectedCategory = JSON.parse(
-      lBooksSectionocalStorage.getItem("selectedCategory")
+      localStorage.getItem("selectedCategory")
     );
     console.log(selectedCategory);
     if (selectedCategory) {
@@ -116,4 +113,6 @@ const [books, setBooks] = useState([]);
       </div>
     </div>
   );
+};
+
 export default BooksSection;
