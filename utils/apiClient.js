@@ -1,7 +1,7 @@
 const API_BASE_URL = process.env.NEXTAUTH_URL || "http://localhost:8004";
 
 export const apiClient = async (endpoint, options = {}) => {
-  const url = `${API_BASE_URL}/api/${endpoint}`;
+  const url = `${API_BASE_URL}/api${endpoint}`;
 
   const defaultHeaders = {
     "Content-Type": "application/json",
