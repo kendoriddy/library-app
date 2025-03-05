@@ -162,7 +162,7 @@ const Page = () => {
               MATRIC NUMBER
             </label>
             <input
-              type="number"
+              type="text"
               name="matric"
               value={form.matric}
               onChange={handleChange}
@@ -240,7 +240,7 @@ const Page = () => {
               PHONE NUMBER
             </label>
             <input
-              type="number"
+              type="text"
               name="phone"
               value={form.phone}
               onChange={handleChange}

@@ -167,7 +167,7 @@ export default function RegistrationForm() {
                   MATRIC NUMBER
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   name="matric"
                   value={form.matric}
                   onChange={handleChange}
@@ -255,7 +255,7 @@ export default function RegistrationForm() {
                   PHONE NUMBER
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   name="phone"
                   value={form.phone}
                   onChange={handleChange}
