@@ -6,7 +6,9 @@ import { useRouter } from "next/navigation";
 import { Container, Typography, Button } from "@mui/material";
 
 export default function Dashboard() {
-  const { data: session, status } = useSession();
+  const sessionData = useSession();
+  const session = sessionData?.data;
+  const status = sessionData?.status;
   const router = useRouter();
 
   if (status === "loading") return <p>Loading...</p>;
