@@ -25,7 +25,7 @@ export default function Login() {
         studentId: form.matric,
         password: form.password,
       };
-      const response = await apiClient("user/login", {
+      const response = await apiClient("/user/login", {
         method: "POST",
         body: JSON.stringify(payload),
         headers: {

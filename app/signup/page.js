@@ -83,7 +83,7 @@ export default function RegistrationForm() {
         faculty: form.faculty,
         session_of_entry: form.session,
       };
-      const response = await apiClient("user/register", {
+      const response = await apiClient("/user/register", {
         method: "POST",
         body: JSON.stringify(payload),
         headers: {
