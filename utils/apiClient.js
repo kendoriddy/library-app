@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXTAUTH_URL || "https://uilibraryservice.com.ng";
+const API_BASE_URL = process.env.NEXTAUTH_URL || "https://www.uilibraryservice.com.ng";
 
 export const apiClient = async (endpoint, options = {}) => {
   const url = `${API_BASE_URL}/api${endpoint}`;
