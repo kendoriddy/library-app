@@ -1,28 +1,24 @@
 "use client";
+export const dynamic = "force-dynamic"; // Forces this page to be dynamic
 
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import { Container, Typography, Button } from "@mui/material";
 
 export default function Dashboard() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  useEffect(() => {
-    if (!session && status !== "loading") {
-      router.push("/login");
-    }
-  }, [session, status, router]);
-
-  if (status === "loading" || !session) {
-    return <p>Loading...</p>;
+  if (status === "loading") return <p>Loading...</p>;
+  if (!session) {
+    router.push("/login");
+    return null;
   }
 
   return (
     <Container>
       <Typography variant="h4">Dashboard</Typography>
-      <Typography>Welcome, {session?.user?.name || "Guest"}</Typography>
+      <Typography>Welcome, {session.user?.name}</Typography>
       <Button onClick={() => router.push("/dashboard/profile")}>
         Go to Profile
       </Button>
