@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXTAUTH_URL || "http://localhost:3000";
+const API_BASE_URL = process.env.NEXTAUTH_URL || "http://localhost:8004";
 
 export const apiClient = async (endpoint, options = {}) => {
   const url = `${API_BASE_URL}/api/${endpoint}`;
