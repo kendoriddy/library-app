@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import logo from "@/assets/Image17.png";
 import Image from "next/image";
 import libraryimg from "@/assets/libraryimg.png";
@@ -115,4 +115,10 @@ const BooksSection = () => {
   );
 };
 
-export default BooksSection;
+const BooksPage = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <BooksSection />
+  </Suspense>
+);
+
+export default BooksPage;
