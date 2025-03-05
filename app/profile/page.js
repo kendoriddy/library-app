@@ -241,7 +241,7 @@ const Page = () => {
             </label>
             <input
               type="number"
-              name="matric"
+              name="phone"
               value={form.phone}
               onChange={handleChange}
               className="w-full focus:outline-none text-[#383838] rounded-[15px]"
